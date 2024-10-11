@@ -4,7 +4,7 @@ const moment = require("moment");
 const axios = require("axios");
 const { calculateDistance } = require("../../helper/calculateDistance");
 const Setting = require("../../model/Setting");
-const { retry } = require("@reduxjs/toolkit/query");
+// const { retry } = require("@reduxjs/toolkit/query");
 const Month = require("../../model/Month");
 
 const checkIn = async (req, res, next) => {
