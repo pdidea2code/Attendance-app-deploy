@@ -1,0 +1,114 @@
+// Here you can add other styles
+@media (min-width: 992px) {
+  .main-col {
+    width: 33.33%;
+  }
+}
+
+/* -------------------------- datatable responsive media query-------------------------- */
+@media (max-width: 900px) {
+  .MuiTableHead-root {
+    display: none !important;
+  }
+  .MuiTableCell-sizeMedium {
+    display: inline-block !important;
+  }
+  .MuiTableCell-paddingCheckbox {
+    display: table-cell !important;
+  }
+}
+@media (max-width: 425px) {
+  .tss-1vd39vz-MUIDataTableBodyCell-stackedCommon {
+    font-size: 10px !important;
+  }
+}
+
+@media (max-width: 300px) {
+  .tss-1vd39vz-MUIDataTableBodyCell-stackedCommon {
+    font-size: 10px !important;
+  }
+}
+@media (max-width: 1400px) {
+  html:not([dir='rtl']) .ms-2 {
+    margin-left: 2rem !important;
+  }
+}
+@media (min-width: 1440px) {
+  html:not([dir='rtl']) .ms-2 {
+    margin-left: 9rem !important;
+  }
+}
+
+@media (max-width: 320px) {
+  html:not([dir='rtl']) .ms-2 {
+    padding-bottom: 28px;
+  }
+}
+/* ----------------------------- end media query ----------------------------- */
+
+.MuiTableCell-head {
+  padding-left: 0px !important;
+  background-color: #ffffff33 !important;
+}
+
+.tss-1akey0g-MUIDataTableHeadCell-data,
+.MuiTypography-root {
+  font-weight: 800 !important;
+  text-transform: uppercase;
+}
+
+.css-1ygcj2i-MuiTableCell-root {
+  font-weight: 800 !important;
+  text-transform: uppercase;
+}
+
+.sidebar {
+  --cui-sidebar-brand-bg: #e4eff9 !important;
+  --cui-sidebar-brand-height: 7rem !important;
+}
+
+.right-text {
+  display: flex;
+  justify-content: right;
+  margin-top: 0rem;
+  margin-bottom: 0.5rem;
+}
+.AddButton {
+  background-color: #152bce !important;
+  border: none !important;
+  margin-top: 3.3rem;
+}
+
+.errors {
+  color: #e55353;
+  font-size: 0.875em;
+}
+.success {
+  color: #40903c;
+}
+
+.deleteButton {
+  color: #ffff;
+  cursor: pointer;
+  border: 1px solid;
+  border-radius: 5px;
+  margin: 0px 6px;
+  font-size: 30px !important;
+  padding: 4px;
+  background-color: #dc3545;
+}
+.editButton {
+  color: #ffff;
+  cursor: pointer;
+  border: 1px solid;
+  border-radius: 5px;
+  margin: 0px 6px;
+  font-size: 30px !important;
+  padding: 4px;
+  background-color: #3c4b64;
+}
+.submitButton {
+  display: flex;
+  justify-content: flex-end;
+  // margin-top: 4rem !important;
+}

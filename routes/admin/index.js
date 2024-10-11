@@ -1,0 +1,33 @@
+const express = require("express");
+const router = express.Router();
+const authRouter = require("./authRouter");
+const permissionRouter = require("./permissionRouter");
+const roleRouter = require("./roleRouter");
+const userRouter = require("./userRouter");
+const adminsRouter = require("./adminsRouter");
+const announcementRouter = require("./announcementRouter");
+const eventRouter = require("./eventRouter");
+const holidayRouter = require("./holidayRouter");
+const settingRouter = require("./settingRouter");
+const monthRouter = require("./monthRouter");
+const attendanceRouter = require("./attendanceRouter");
+const leaveRouter = require("./leaveRouter");
+const generalsettingRouter = require("./generalsettingRouter");
+const dashbordRouter = require("./dashbordRouter");
+
+router.use("/admin", authRouter);
+router.use("/admin/permission", permissionRouter);
+router.use("/admin/role", roleRouter);
+router.use("/admin/employee", userRouter);
+router.use("/admin/admins", adminsRouter);
+router.use("/admin/announcement", announcementRouter);
+router.use("/admin/event", eventRouter);
+router.use("/admin/holiday", holidayRouter);
+router.use("/admin/setting", settingRouter);
+router.use("/admin/month", monthRouter);
+router.use("/admin/attendance", attendanceRouter);
+router.use("/admin/leave", leaveRouter);
+router.use("/admin/generalsetting", generalsettingRouter);
+router.use("/admin/dashbord", dashbordRouter);
+
+module.exports = router;

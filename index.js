@@ -1,0 +1,50 @@
+const express = require("express");
+const app = express();
+const bodyparser = require("body-parser");
+const cors = require("cors");
+const path = require("path");
+require("dotenv").config();
+const PORT = process.env.PORT;
+const DB = require("./config/db");
+
+app.use(cors());
+app.use(bodyparser.json());
+app.use(bodyparser.urlencoded({ extended: true }));
+DB();
+
+// app.use((req, res, next) => {
+//   const currentTime = new Date().toISOString();
+//   console.log(`[${currentTime}] ${req.method} ${req.url} - IP: ${req.ip}`);
+//   next();
+// });
+
+const apps = require("./routes/app");
+app.use(apps);
+
+const admin = require("./routes/admin");
+app.use(admin);
+
+app.use((err, req, res, next) => {
+  console.error("Error log:", err);
+  if (err.code && err.code === 11000) {
+    err.message = `Duplicate key error: ${Object.keys(err.keyValue)[0]} with value '${
+      Object.values(err.keyValue)[0]
+    }' already exists.`;
+  }
+
+  res.status(err.status || 500).json({
+    status: err.status || 500,
+    success: false,
+    message: err.message || "An unexpected error occurred.",
+  });
+});
+
+app.use("/profileimg", express.static(path.join(__dirname, "./public/profileimg")));
+app.use("/announcementimg", express.static(path.join(__dirname, "./public/announcementimg")));
+
+app.use(express.static(path.join(__dirname, "./client/build")));
+app.get("/*", async function (req, res) {
+  await res.sendFile(path.join(__dirname, "./client/build", "index.html"));
+});
+
+app.listen(PORT, () => console.log(`Server is running at http://localhost:${PORT}`));
