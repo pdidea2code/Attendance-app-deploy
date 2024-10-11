@@ -88,7 +88,7 @@ axios.interceptors.response.use(
 
         return axios(originalRequest)
       } catch (refresherr) {
-        console.log('err refreshing token:', refresherr)
+        // console.log('err refreshing token:', refresherr)
         // You might want to redirect to login or handle the err in another way
       }
     }

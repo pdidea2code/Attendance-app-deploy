@@ -59,7 +59,7 @@ const Leave = () => {
         status: status,
       }
       const res = await changeStatus(req)
-      console.log(res)
+      // console.log(res)
     } catch (error) {
       console.log(error)
       toast.error(error.response?.data?.message || 'An error occurred')
