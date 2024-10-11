@@ -182,7 +182,7 @@ const Announcementform = () => {
                               width: '150px',
                               height: '150px',
                               objectFit: 'cover',
-                              borderRadius: '50%',
+                              borderRadius: '5px',
                             }}
                           />
                         </div>
