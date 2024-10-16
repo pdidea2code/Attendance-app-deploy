@@ -4,7 +4,6 @@ const moment = require("moment");
 const axios = require("axios");
 const { calculateDistance, getPlaceName } = require("../../helper/calculateDistance");
 const Setting = require("../../model/Setting");
-const { retry } = require("@reduxjs/toolkit/query");
 const Month = require("../../model/Month");
 const User = require("../../model/User");
 
