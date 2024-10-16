@@ -7,27 +7,83 @@ const Holiday = require("../../model/Holiday");
 const Notification = require("../../model/Notification");
 const Setting = require("../../model/Setting");
 
+// const homepage = async (req, res, next) => {
+//   try {
+//     const currentDate = new Date().toISOString().split("T")[0] + "T00:00:00.000+00:00";
+//     const lastAttendance = await Attendance.find({ user_id: req.user._id }).sort({ createdAt: -1 });
+
+//     const setting = await Setting.findOne();
+//     const event = await Event.findOne({ date: currentDate });
+//     const announcement = await Announcement.find({ status: true });
+//     const attendance = {
+//       day: lastAttendance.day,
+//       checkin: lastAttendance.checkin,
+//       checkout: lastAttendance.checkout,
+//       overtime: lastAttendance.overtime,
+//     };
+//     const data = {
+//       attendance,
+//       baraktime: setting.breaktime,
+//       event: event?.title,
+//       announcement,
+//     };
+//     console.log(currentDate);
+//     const baseUrl = req.protocol + "://" + req.get("host") + process.env.ANNOUNCEMENT_IMAGE;
+//     successResponse(res, data, baseUrl);
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+
 const homepage = async (req, res, next) => {
   try {
     const currentDate = new Date().toISOString().split("T")[0] + "T00:00:00.000+00:00";
-    const lastAttendance = await Attendance.findOne({ user_id: req.user._id }).sort({ createdAt: -1 });
+
+    const todayAttendance = await Attendance.find({
+      user_id: req.user._id,
+      createdAt: {
+        $gte: new Date(currentDate),
+        $lt: new Date(new Date(currentDate).getTime() + 24 * 60 * 60 * 1000),
+      },
+    }).sort({ createdAt: 1 });
+
+    let totalWorkMinutes = 0;
+    todayAttendance.forEach((record) => {
+      if (record.checkin && record.checkout) {
+        const checkinTime = new Date(record.checkin).getTime();
+        const checkoutTime = new Date(record.checkout).getTime();
+        totalWorkMinutes += Number(record.workingtime);
+      }
+    });
 
     const setting = await Setting.findOne();
+    const standardWorkMinutes = setting.workingtime;
+    const overtimeMinutes = totalWorkMinutes > standardWorkMinutes ? totalWorkMinutes - standardWorkMinutes : 0;
+
+    const lastAttendance = await Attendance.findOne({ user_id: req.user._id }).sort({ createdAt: -1 });
+
     const event = await Event.findOne({ date: currentDate });
     const announcement = await Announcement.find({ status: true });
-    const attendance = {
-      day: lastAttendance.day,
-      checkin: lastAttendance.checkin,
-      checkout: lastAttendance.checkout,
-      overtime: lastAttendance.overtime,
+
+    const attendanceSummary = {
+      totalWorkTime: `${Math.floor(totalWorkMinutes)}`,
+      overtime: `${Math.floor(overtimeMinutes)}`,
+      lastAttendance: lastAttendance
+        ? {
+            checkin: lastAttendance.checkin,
+            checkout: lastAttendance.checkout,
+            day: lastAttendance.day,
+          }
+        : null,
     };
+
     const data = {
-      attendance,
-      baraktime: setting.breaktime,
-      event: event.title,
+      attendance: attendanceSummary,
+      breaktime: setting.breaktime,
+      event: event?.title,
       announcement,
     };
-    console.log(currentDate);
+
     const baseUrl = req.protocol + "://" + req.get("host") + process.env.ANNOUNCEMENT_IMAGE;
     successResponse(res, data, baseUrl);
   } catch (error) {

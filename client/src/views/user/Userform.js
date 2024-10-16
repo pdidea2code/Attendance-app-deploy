@@ -128,7 +128,7 @@ const Userform = () => {
                     <CFormLabel>Name</CFormLabel>
                     <CFormInput
                       type="text"
-                      placeholder="Name"
+                      placeholder="Jone Doe"
                       {...register('name', { required: 'Name is required' })}
                       invalid={!!errors.name}
                     />
@@ -138,7 +138,7 @@ const Userform = () => {
                     <CFormLabel>Email</CFormLabel>
                     <CFormInput
                       type="email"
-                      placeholder="Email"
+                      placeholder="example@domain.com"
                       {...register('email', { required: 'Email is required' })}
                       invalid={!!errors.email}
                     />

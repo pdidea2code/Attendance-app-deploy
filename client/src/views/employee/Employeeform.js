@@ -17,7 +17,9 @@ import {
 } from '@coreui/react'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import { addEmplloyee, updateEmplloyee } from 'src/redux/api/api'
+import { addEmplloyee, getMapApikey, updateEmplloyee } from 'src/redux/api/api'
+
+import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api'
 
 const Employeeform = () => {
   const {
@@ -31,7 +33,24 @@ const Employeeform = () => {
   const [isUpdate, setIsUpdate] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [image, setImage] = useState('')
+  const [mapapikey, setMapApiKey] = useState('')
   const navigate = useNavigate()
+
+  const getmapapikey = async () => {
+    try {
+      setIsLoading(true)
+      const res = await getMapApikey()
+
+      if (res.status === 200) {
+        setIsLoading(false)
+        setMapApiKey(res.data.info)
+      }
+    } catch (error) {
+      setIsLoading(false)
+      const errorMsg = error.response?.data?.message || 'Something went wrong'
+      toast.error(errorMsg)
+    }
+  }
 
   const handleFileChange = (e) => {
     const files = e.target.files[0]
@@ -51,6 +70,7 @@ const Employeeform = () => {
         if (data[key][0] !== undefined) {
           formData.append(key, data[key][0])
         }
+      } else if (data[key] === '') {
       } else {
         formData.append(key, data[key])
       }
@@ -64,7 +84,7 @@ const Employeeform = () => {
             }
           })
           .catch((error) => {
-            console.log(error)
+            // console.log(error)
             setIsLoading(false)
             const errorMsg = error.response?.data?.message || 'Something went wrong'
             toast.error(errorMsg)
@@ -78,14 +98,55 @@ const Employeeform = () => {
           })
           .catch((error) => {
             setIsLoading(false)
-            console.log(error)
+            // console.log(error)
             const errorMsg = error.response?.data?.message || 'Something went wrong'
             toast.error(errorMsg)
           })
   }
 
+  const center = {
+    lat: Number(state?.editData?.workplaceLatitude),
+    lng: Number(state?.editData?.workplaceLongitude),
+  }
+
+  const [location, setLocation] = useState(center)
+  const [marker, setMarker] = useState(center)
+
+  const handleMapClick = (event) => {
+    // console.log(event)
+    setLocation({
+      lat: event.latLng.lat(),
+      lng: event.latLng.lng(),
+    })
+    setMarker({
+      lat: event.latLng.lat(),
+      lng: event.latLng.lng(),
+    })
+
+    setValue('workplaceLatitude', event.latLng.lat())
+    setValue('workplaceLongitude', event.latLng.lng())
+  }
+
+  const mapContainerStyle = {
+    height: '400px',
+    width: 'auto',
+  }
+
+  const formatDateToYMD = (date) => {
+    if (!date) return ''
+    const parts = date.split('/')
+
+    if (parts.length === 3) {
+      const [day, month, year] = parts
+      return `${year}-${month}-${day}`
+    }
+    return ''
+  }
+
   useEffect(() => {
+    getmapapikey()
     if (state?.editData) {
+      // console.log(state.editData.dob)
       setIsUpdate(state.editData._id)
       setImage(state.imageUrl + state.editData.image)
       setValue('name', state.editData.name)
@@ -93,6 +154,11 @@ const Employeeform = () => {
       setValue('user_id', state.editData.user_id)
       setValue('position', state.editData.position)
       setValue('phoneno', state.editData.phoneno)
+      setValue('workplaceLatitude', state.editData.workplaceLatitude)
+      setValue('workplaceLongitude', state.editData.workplaceLongitude)
+      // setValue('dob', formatDateToYMD(state.editData.dob))
+      setValue('dob', state.editData.dob)
+      // setValue('dob', '2005/6/20')
     }
   }, [state, setValue])
 
@@ -112,7 +178,7 @@ const Employeeform = () => {
                     <CFormLabel>Name</CFormLabel>
                     <CFormInput
                       type="text"
-                      placeholder="Name"
+                      placeholder="Jone Doe"
                       {...register('name', { required: 'Name is required' })}
                       invalid={!!errors.name}
                     />
@@ -122,7 +188,7 @@ const Employeeform = () => {
                     <CFormLabel>Email</CFormLabel>
                     <CFormInput
                       type="email"
-                      placeholder="Email"
+                      placeholder="example@domain.com"
                       {...register('email', { required: 'Email is required' })}
                       invalid={!!errors.email}
                     />
@@ -135,9 +201,39 @@ const Employeeform = () => {
                       placeholder="Password"
                       {...register('password', {
                         required: isUpdate === '' ? 'Password is required' : false,
+                        minLength: {
+                          value: 8,
+                          message: 'Password must be at least 8 characters long',
+                        },
+                        validate: {
+                          validatePassword: (value) => {
+                            if (!value) return true // Skip validation if no value is entered
+
+                            const hasUpperCase = /[A-Z]/.test(value)
+                            const hasLowerCase = /[a-z]/.test(value)
+                            const hasNumber = /[0-9]/.test(value)
+                            const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(value)
+
+                            if (!hasUpperCase) {
+                              return 'Password must contain at least one uppercase letter'
+                            }
+                            if (!hasLowerCase) {
+                              return 'Password must contain at least one lowercase letter'
+                            }
+                            if (!hasNumber) {
+                              return 'Password must contain at least one number'
+                            }
+                            if (!hasSpecialChar) {
+                              return 'Password must contain at least one special character'
+                            }
+
+                            return true // If all validations pass
+                          },
+                        },
                       })}
                       invalid={!!errors.password}
                     />
+
                     {errors.password && (
                       <CFormFeedback invalid>{errors.password.message}</CFormFeedback>
                     )}
@@ -160,11 +256,54 @@ const Employeeform = () => {
                       <CFormFeedback invalid>{errors.confpassword.message}</CFormFeedback>
                     )}
                   </CCol>
+                  <CCol xl={6} md={12}>
+                    <CFormLabel>Workplace Latitude</CFormLabel>
+                    <CFormInput
+                      type="number"
+                      step="any"
+                      placeholder="21.230449"
+                      {...register('workplaceLatitude', {
+                        required: 'workplace Latitude is required',
+                      })}
+                      invalid={!!errors.workplaceLatitude}
+                    />
+                    <CFormFeedback invalid>{errors.workplaceLatitude?.message}</CFormFeedback>
+                  </CCol>
+                  <CCol xl={6} md={12}>
+                    <CFormLabel>Workplace Longitude</CFormLabel>
+                    <CFormInput
+                      type="number"
+                      step="any"
+                      placeholder="72.900889"
+                      {...register('workplaceLongitude', {
+                        required: 'workplace Longitude is required',
+                      })}
+                      invalid={!!errors.workplaceLongitude}
+                    />
+                    <CFormFeedback invalid>{errors.workplaceLongitude?.message}</CFormFeedback>
+                  </CCol>
+                  <CCol xl={12} md={12}>
+                    <LoadScript googleMapsApiKey={mapapikey}>
+                      <GoogleMap
+                        mapContainerStyle={mapContainerStyle}
+                        center={location}
+                        zoom={12}
+                        onClick={handleMapClick}
+                      >
+                        {marker && <Marker position={marker} />}
+                      </GoogleMap>
+                      {/* <div>
+                        <h2>Selected Location</h2>
+                        <p>Latitude: {location.lat}</p>
+                        <p>Longitude: {location.lng}</p>
+                      </div> */}
+                    </LoadScript>
+                  </CCol>
                   <CCol xl={4} md={12}>
                     <CFormLabel>User ID</CFormLabel>
                     <CFormInput
                       type="text"
-                      placeholder="User ID"
+                      placeholder="01"
                       {...register('user_id', { required: 'User ID is required' })}
                       invalid={!!errors.user_id}
                     />
@@ -174,7 +313,7 @@ const Employeeform = () => {
                     <CFormLabel>Position</CFormLabel>
                     <CFormInput
                       type="text"
-                      placeholder="Position"
+                      placeholder="Software Engineer"
                       {...register('position', { required: 'Position is required' })}
                       invalid={!!errors.position}
                     />
@@ -184,11 +323,28 @@ const Employeeform = () => {
                     <CFormLabel>Phone No</CFormLabel>
                     <CFormInput
                       type="tel"
-                      placeholder="Phone No"
-                      {...register('phoneno', { required: 'Phone No is required' })}
+                      placeholder="9999999999"
+                      {...register('phoneno', {
+                        required: 'Phone No is required',
+                        pattern: {
+                          value: /^[0-9]{10}$/,
+                          message: 'Phone No must be exactly 10 digits',
+                        },
+                      })}
                       invalid={!!errors.phoneno}
                     />
                     <CFormFeedback invalid>{errors.phoneno?.message}</CFormFeedback>
+                  </CCol>
+                  <CCol xl={4} md={12}>
+                    <CFormLabel>Date of birth</CFormLabel>
+                    <CFormInput
+                      type="date"
+                      {...register('dob', {
+                        required: 'Date of birth No is required',
+                      })}
+                      invalid={!!errors.dob}
+                    />
+                    <CFormFeedback invalid>{errors.dob?.message}</CFormFeedback>
                   </CCol>
                   <CCol xl={4} md={12}>
                     <CFormLabel>Image</CFormLabel>
@@ -203,7 +359,8 @@ const Employeeform = () => {
                     />
                     {errors.image && <CFormFeedback invalid>{errors.image.message}</CFormFeedback>}
                   </CCol>
-                  <CCol md={5}>
+
+                  <CCol md={4}>
                     {image && (
                       <>
                         <p>Image Preview</p>
@@ -222,6 +379,7 @@ const Employeeform = () => {
                       </>
                     )}
                   </CCol>
+
                   <CCol md={12} className="text-center submitButton">
                     {isLoading ? (
                       <CButton disabled>

@@ -27,7 +27,34 @@ function getDateTimestamp() {
   return today.getTime();
 }
 
-module.exports = { calculateDistance, getDateTimestamp };
+const axios = require("axios");
+
+const API_KEY = "AIzaSyA79qQWqhp7GBKabC1c9RHYqXuBSD2pT1g"; // Replace with your Google Maps API Key
+
+async function getPlaceName(lat, lng) {
+  try {
+    const response = await axios.get("https://maps.googleapis.com/maps/api/geocode/json", {
+      params: {
+        latlng: `${lat},${lng}`,
+        key: API_KEY,
+      },
+    });
+
+    if (response.data.status === "OK") {
+      const placeName = response.data.results[0].formatted_address;
+      return placeName;
+    } else {
+      throw new Error(`Geocoding failed: ${response.data.status}`);
+    }
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
+
+// Example usage
+
+module.exports = { calculateDistance, getDateTimestamp, getPlaceName };
 
 // Example usage
 // const distance = calculateDistance(21.230399, 72.900771, 21.2301229, 72.8999804); // London to Paris

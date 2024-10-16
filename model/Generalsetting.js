@@ -17,6 +17,10 @@ const GeneralsettingSchema = new mongoose.Schema(
       type: String,
       default: "exam plea pass word",
     },
+    mapapikey: {
+      type: String,
+      default: "googlemapapikey",
+    },
   },
   {
     timeseries: true,

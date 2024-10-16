@@ -128,7 +128,7 @@ const Setting = () => {
                           invalid={!!errors.rediusmiter}
                         />
 
-                        <CInputGroupText>Miter</CInputGroupText>
+                        <CInputGroupText>Meter</CInputGroupText>
                         <CFormFeedback invalid>{errors.rediusmiter?.message}</CFormFeedback>
                       </CInputGroup>
                     </CCol>

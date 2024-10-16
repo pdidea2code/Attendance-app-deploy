@@ -1,11 +1,12 @@
 const express = require("express");
 const verifyAdminToken = require("../../helper/verifyAdminToken");
-const { getAllUsers, addUser, updateUser } = require("../../controller/admin/user");
+const { getAllUsers, addUser, updateUser, deleteUser } = require("../../controller/admin/user");
 const permissionManage = require("../../helper/permissionManage");
 const { singleFileUpload } = require("../../helper/fiileUpload");
 const router = express.Router();
 
 router.get("/getAllUser", verifyAdminToken, permissionManage("employee.view"), getAllUsers);
+router.get("/deleteUser/:id", verifyAdminToken, permissionManage("employee.delete"), deleteUser);
 router.post(
   "/addUser",
   verifyAdminToken,

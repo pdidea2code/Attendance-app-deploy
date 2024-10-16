@@ -32,6 +32,16 @@ const AttendanceSchema = new mongoose.Schema(
       type: String,
       default: null,
     },
+    workplaceLatitude: {
+      type: String,
+      require: true,
+      // default: null,
+    },
+    workplaceLongitude: {
+      type: String,
+      require: true,
+      // default: null,
+    },
     workingtime: {
       type: String,
       default: null,

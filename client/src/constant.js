@@ -1,4 +1,4 @@
-export const MAIN_URL = 'https://attendance-app-deploy.onrender.com'
+export const MAIN_URL = 'http://localhost:5600'
 
 /* ---------------------------- ALL Auth API ---------------------------- */
 export const LOGIN_API = '/admin/login'
@@ -33,6 +33,7 @@ export const ADD_PERMISSION = '/admin/permission/addPermission'
 export const GET_EMPLOYEE = '/admin/employee/getAllUser'
 export const ADD_EMPLOYEE = '/admin/employee/addUser'
 export const UPDATE_EMPLOYEE = '/admin/employee/updateUser/'
+export const DELETE_EMPLOYEE = '/admin/employee/deleteUser/'
 
 /* ---------------------------- END Employee API ---------------------------- */
 
@@ -102,6 +103,7 @@ export const GET_ALL_LEAVE = '/admin/leave/getallLeave'
 
 export const GET_GENERAL_SETTING = '/admin/generalsetting/getGeneralsetting'
 export const UPDATE_GENERAL_SETTING = '/admin/generalsetting/updateGeneralsetting'
+export const GET_MAP_APIKEY = '/admin/generalsetting/getMapApikey'
 
 /* ---------------------------- END GENERAL_SETTING API ---------------------------- */
 

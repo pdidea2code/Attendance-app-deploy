@@ -10,14 +10,14 @@ const sendMail = async (data, req, res) => {
   var transporter = nodemailer.createTransport({
     service: process.env.SMTP_SERVICE,
     secure: true,
-    auth: {
-      user: mail.email,
-      pass: mail.password,
-    },
     // auth: {
-    //   user: process.env.SMTP_EMAIL,
-    //   pass: process.env.SMTP_PASSWORD,
+    //   user: mail.email,
+    //   pass: mail.password,
     // },
+    auth: {
+      user: process.env.SMTP_EMAIL,
+      pass: process.env.SMTP_PASSWORD,
+    },
   });
 
   fs.readFile(data.htmlFile, { encoding: "utf-8" }, function (err, html) {
@@ -46,11 +46,11 @@ const sendMail = async (data, req, res) => {
       transporter.sendMail(mailOptions, function (err, info) {
         if (err) {
           console.log(err, "err");
-          queryErrorRelatedResponse(res, 500, "Email Not Send");
-          return 0;
+          return queryErrorRelatedResponse(res, 500, "Email Not Send");
+          // return 0;
         } else {
-          successResponse(res, "Check your email");
-          return "done";
+          return successResponse(res, "Check your email");
+          // return "done";
         }
       });
     }

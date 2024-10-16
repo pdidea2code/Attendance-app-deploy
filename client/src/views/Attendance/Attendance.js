@@ -109,7 +109,7 @@ const Attendance = () => {
       options: {
         customBodyRender: (value) => {
           const editData = dataTableData.find((data) => data._id === value)
-          return `${editData.checkinLatitude},${editData.checkinLongitude}`
+          return `${editData.checkinLatitude}, ${editData.checkinLongitude}`
         },
       },
     },
@@ -127,7 +127,7 @@ const Attendance = () => {
       options: {
         customBodyRender: (value) => {
           const editData = dataTableData.find((data) => data._id === value)
-          return `${editData.checkoutLatitude},${editData.checkoutLongitude}`
+          return `${editData.checkoutLatitude}, ${editData.checkoutLongitude}`
         },
       },
     },

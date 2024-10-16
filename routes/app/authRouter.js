@@ -8,12 +8,13 @@ const {
   resetPassword,
   changePassword,
   adduserProfile,
+  editProfile,
 } = require("../../controller/app/auth");
 const verifyAppToken = require("../../helper/verifyAppToken");
 const { singleFileUpload } = require("../../helper/fiileUpload");
 const router = express.Router();
 
-router.post("/Register", Register);
+// router.post("/Register", Register);
 router.post("/Login", Login);
 router.post("/RefreshToken", RefreshToken);
 router.post("/checkEmailId", checkEmailId);
@@ -24,6 +25,12 @@ router.post(
   "/adduserProfile",
   singleFileUpload("public/profileimg", ["image/png", "image/jpeg", "image/jpg"], 1024 * 5024, "image"),
   adduserProfile
+);
+router.post(
+  "/editProfile",
+  verifyAppToken,
+  singleFileUpload("public/profileimg", ["image/png", "image/jpeg", "image/jpg"], 1024 * 5024, "image"),
+  editProfile
 );
 
 module.exports = router;

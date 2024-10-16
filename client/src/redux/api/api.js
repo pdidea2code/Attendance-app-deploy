@@ -18,6 +18,7 @@ import {
   DASHBOARD_LEAVE_REQUEST,
   DELETE_ADMIN,
   DELETE_ANNOUNCEMENT,
+  DELETE_EMPLOYEE,
   DELETE_EVENT,
   DELETE_HOLIDAY,
   DELETE_MONTH,
@@ -37,6 +38,7 @@ import {
   GET_EVENT,
   GET_GENERAL_SETTING,
   GET_HOLIDAY,
+  GET_MAP_APIKEY,
   GET_MONTH,
   GET_PERMISSION,
   GET_ROLE,
@@ -88,7 +90,7 @@ axios.interceptors.response.use(
 
         return axios(originalRequest)
       } catch (refresherr) {
-        console.log('err refreshing token:', refresherr)
+        // console.log('err refreshing token:', refresherr)
         // You might want to redirect to login or handle the err in another way
       }
     }
@@ -168,6 +170,10 @@ export const addPermission = (data) =>
 
 export const getAllEmplloyee = () =>
   axios.get(MAIN_URL + GET_EMPLOYEE, {
+    headers: { Authorization: `Bearer ${Cookies.get('token')}` },
+  })
+export const deleteEmplloyee = (id) =>
+  axios.get(MAIN_URL + DELETE_EMPLOYEE + id, {
     headers: { Authorization: `Bearer ${Cookies.get('token')}` },
   })
 
@@ -353,7 +359,10 @@ export const updateGeneralSettintg = (data) =>
   axios.post(MAIN_URL + UPDATE_GENERAL_SETTING, data, {
     headers: { Authorization: `Bearer ${Cookies.get('token')}` },
   })
-
+export const getMapApikey = () =>
+  axios.get(MAIN_URL + GET_MAP_APIKEY, {
+    headers: { Authorization: `Bearer ${Cookies.get('token')}` },
+  })
 /* ------------------------------ End general Setting API ----------------------------- */
 
 /* ------------------------------ ALL Dashboard API ----------------------------- */
@@ -362,76 +371,13 @@ export const getAttendanceCount = () =>
   axios.get(MAIN_URL + DASHBOARD_ATTENDANCE_COUNT, {
     headers: { Authorization: `Bearer ${Cookies.get('token')}` },
   })
-  
+
 export const getLeaveRequest = () =>
   axios.get(MAIN_URL + DASHBOARD_LEAVE_REQUEST, {
     headers: { Authorization: `Bearer ${Cookies.get('token')}` },
   })
 
 /* ------------------------------ End Dashboard API ----------------------------- */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 export function convertToDDMMYYYY(isoDateString) {
   const date = new Date(isoDateString)

@@ -38,9 +38,20 @@ const updateGeneralsetting = async (req, res, next) => {
     req.body.privacypolicy ? (generalsetting.privacypolicy = req.body.privacypolicy) : generalsetting.privacypolicy;
     req.body.email ? (generalsetting.email = req.body.email) : generalsetting.email;
     req.body.password ? (generalsetting.password = req.body.password) : generalsetting.password;
+    req.body.mapapikey ? (generalsetting.mapapikey = req.body.mapapikey) : generalsetting.mapapikey;
 
     await generalsetting.save();
     successResponse(res, "Update Successfully");
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getMapApikey = async (req, res, next) => {
+  try {
+    const apikey = await Generalsetting.findOne();
+
+    successResponse(res, apikey.mapapikey);
   } catch (error) {
     next(error);
   }
@@ -50,4 +61,5 @@ module.exports = {
   addGeneralsetting,
   getGeneralsetting,
   updateGeneralsetting,
+  getMapApikey,
 };

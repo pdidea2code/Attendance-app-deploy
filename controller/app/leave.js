@@ -205,4 +205,55 @@ const leaveCountCorrentYear = async (req, res, next) => {
   }
 };
 
-module.exports = { addLeave, getLeave, leaveCount, leaveCountCorrentYear };
+const upcomingLeave = async (req, res, next) => {
+  try {
+    const startOfDay = new Date();
+    startOfDay.setHours(0, 0, 0, 0);
+
+    const endOfDay = new Date();
+    endOfDay.setHours(23, 59, 59, 999);
+
+    const leave = await Leave.find({
+      user_id: req.user._id,
+      $or: [
+        {
+          date: { $gt: startOfDay },
+        },
+        // {
+        //   todate: { $gte: startOfDay },
+        // },
+      ],
+    });
+
+    successResponse(res, leave);
+  } catch (error) {
+    next(error);
+  }
+};
+const pastLeave = async (req, res, next) => {
+  try {
+    const startOfDay = new Date();
+    startOfDay.setHours(0, 0, 0, 0);
+
+    const endOfDay = new Date();
+    endOfDay.setHours(23, 59, 59, 999);
+
+    const leave = await Leave.find({
+      user_id: req.user._id,
+      $or: [
+        {
+          date: { $lt: startOfDay },
+        },
+        // {
+        //   todate: { $lte: startOfDay },
+        // },
+      ],
+    });
+
+    successResponse(res, leave);
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { addLeave, getLeave, leaveCount, leaveCountCorrentYear, upcomingLeave, pastLeave };

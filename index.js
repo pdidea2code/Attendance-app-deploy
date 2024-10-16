@@ -3,6 +3,7 @@ const app = express();
 const bodyparser = require("body-parser");
 const cors = require("cors");
 const path = require("path");
+// const cron = require("node-cron");
 require("dotenv").config();
 const PORT = process.env.PORT;
 const DB = require("./config/db");
@@ -11,6 +12,11 @@ app.use(cors());
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({ extended: true }));
 DB();
+
+// cron.schedule("*/1 * * * *", async () => {
+//   console.log("Cron job executed at 12 PM.");
+//   console.log("Cron job executed at:", new Date().toLocaleString());
+// });
 
 // app.use((req, res, next) => {
 //   const currentTime = new Date().toISOString();
@@ -41,10 +47,5 @@ app.use((err, req, res, next) => {
 
 app.use("/profileimg", express.static(path.join(__dirname, "./public/profileimg")));
 app.use("/announcementimg", express.static(path.join(__dirname, "./public/announcementimg")));
-
-app.use(express.static(path.join(__dirname, "./client/build")));
-app.get("/*", async function (req, res) {
-  await res.sendFile(path.join(__dirname, "./client/build", "index.html"));
-});
 
 app.listen(PORT, () => console.log(`Server is running at http://localhost:${PORT}`));

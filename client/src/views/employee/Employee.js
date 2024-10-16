@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { getAllEmplloyee, getrole } from 'src/redux/api/api'
+import { deleteEmplloyee, getAllEmplloyee, getrole } from 'src/redux/api/api'
 import * as Icons from '@mui/icons-material'
 import swal from 'sweetalert'
 import { CSpinner } from '@coreui/react'
@@ -141,7 +141,7 @@ const Employee = () => {
                       dangerMode: true,
                     })
                     if (confirm) {
-                      deletePermission(value)
+                      deleteEmplloyee(value)
                         .then(() => {
                           getemployee()
                           toast.success('Deleted successfully!')

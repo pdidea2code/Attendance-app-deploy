@@ -169,12 +169,12 @@ const Employeeprofile = () => {
                       <CRow>
                         <CCol md={12} className="mb-3">
                           <h5>
-                            <strong>Name:</strong> {employeedetail?.name}
+                            <strong>Name :</strong> {employeedetail?.name}
                           </h5>
                         </CCol>
                         <CCol md={12} className="mb-3">
                           <h6>
-                            <strong>Email:</strong> {employeedetail?.email}
+                            <strong>Email :</strong> {employeedetail?.email}
                           </h6>
                         </CCol>
                         <CCol md={12} className="mb-3">
@@ -184,17 +184,23 @@ const Employeeprofile = () => {
                         </CCol>
                         <CCol md={12} className="mb-3">
                           <h6>
-                            <strong>Position:</strong> {employeedetail?.position}
+                            <strong>Date of birth :</strong>{' '}
+                            {formatDateToDDMMYYYY(employeedetail?.dob)}
                           </h6>
                         </CCol>
                         <CCol md={12} className="mb-3">
                           <h6>
-                            <strong>Employee ID:</strong> {employeedetail?.user_id}
+                            <strong>Position :</strong> {employeedetail?.position}
                           </h6>
                         </CCol>
                         <CCol md={12} className="mb-3">
                           <h6>
-                            <strong>Account Open Date:</strong>{' '}
+                            <strong>Employee ID :</strong> {employeedetail?.user_id}
+                          </h6>
+                        </CCol>
+                        <CCol md={12} className="mb-3">
+                          <h6>
+                            <strong>Account Open Date :</strong>{' '}
                             {formatDateToDDMMYYYY(employeedetail?.createdAt)}
                           </h6>
                         </CCol>

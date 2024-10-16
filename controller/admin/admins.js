@@ -5,6 +5,7 @@ const Role = require("../../model/Role");
 
 const getAllAdmin = async (req, res, next) => {
   try {
+    
     const admin = await Admin.find().populate("role");
     const baseUrl = req.protocol + "://" + req.get("host") + process.env.ADMIN_PROFIILE_IMAGE;
 

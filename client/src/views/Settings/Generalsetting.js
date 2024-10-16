@@ -38,6 +38,7 @@ const Generalsetting = () => {
       const res = await getGeneralSettintg()
       const data = res.data.info
       setSetting(data)
+      setValue('mapapikey', data.mapapikey)
       setValue('email', data.email)
       setValue('password', data.password)
       setValue('privacypolicy', data.privacypolicy)
@@ -84,14 +85,26 @@ const Generalsetting = () => {
   return (
     <>
       <ToastContainer />
+
       <CRow>
         <CCol xs={12} md={12}>
           <CCard className="mb-4">
             <CCardBody>
               <CForm className="row g-3" onSubmit={handleSubmit(onSubmit)}>
+                <CCol md={6}>
+                  <CFormLabel>Google Map API key</CFormLabel>
+                  <CFormInput
+                    type="text"
+                    {...register('mapapikey', { required: 'Google Map API key Id is required' })}
+                    invalid={!!errors.mapapikey}
+                  />
+                  {errors.mapapikey && (
+                    <small className="text-danger">{errors.mapapikey.message}</small>
+                  )}
+                </CCol>
                 {/* Email Settings */}
                 <CCol md={12} className="form-header">
-                  <div>Email Setting</div>
+                  <div>SMTP Email Setting</div>
                 </CCol>
                 <CCol md={6}>
                   <CFormInput
