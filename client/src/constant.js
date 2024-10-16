@@ -1,4 +1,4 @@
-export const MAIN_URL = 'http://localhost:5600'
+export const MAIN_URL = 'https://attendance-app-deploy.onrender.com/'
 
 /* ---------------------------- ALL Auth API ---------------------------- */
 export const LOGIN_API = '/admin/login'
