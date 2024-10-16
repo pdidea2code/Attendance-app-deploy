@@ -45,7 +45,7 @@ app.use((err, req, res, next) => {
   });
 });
 app.use(express.static(path.join(__dirname, "./client/build")));
-app.get("/*", async function (req, res) {
+app.get("/", async function (req, res) {
   await res.sendFile(path.join(__dirname, "./client/build", "index.html"));
 });
 app.use("/profileimg", express.static(path.join(__dirname, "./public/profileimg")));
